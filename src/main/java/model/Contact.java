@@ -4,8 +4,9 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+
 @ToString
 public class Contact {
     private Long id;
@@ -18,6 +19,5 @@ public class Contact {
         this.phoneNumber = phoneNumber;
         this.phone_id = phone_id;
     }
-
 }
 

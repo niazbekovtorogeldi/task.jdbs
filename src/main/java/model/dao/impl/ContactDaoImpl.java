@@ -13,14 +13,15 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public void createContactTable() {
-        String sql = "create table if not exists contacts(" +
-                "id serial primary key," +
+        String sql = "create table  contacts(" +
+                "id  serial primary key," +
                 "contact_name varchar," +
-                "contact_number varchar);";
+                "contact_number varchar, " +
+                "phone_id int references phones(id) );";
         try(Connection connection = Configuration.connectionToDataBace();
             Statement statement = connection.createStatement()){
             statement.executeUpdate(sql);
-            System.out.println("contac table id created...");
+            System.out.println("contact table id created...");
         }catch (SQLException a){
             System.out.println(a.getMessage());
         }
@@ -30,14 +31,15 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public void saveContact(Contact contact) {
         String sql = "insert into contacts(" +
-                "contact_name,contact_number)" +
-                "values(?,?);";
+                "contact_name,contact_number,phone_id)" +
+                "values(?,?,?);";
         try(Connection connection = Configuration.connectionToDataBace();
             PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1,contact.getContactName());
             preparedStatement.setString(2,contact.getPhoneNumber());
+            preparedStatement.setLong(3, contact.getPhone_id());
             preparedStatement.executeUpdate();
-            System.out.println("save...");
+            System.out.println("Contact is Save...");
 
         }catch (SQLException a){
             System.out.println(a.getMessage());
@@ -47,17 +49,19 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public Contact getContactById(Long id) {
-        Contact contact = null;
+        Contact contact =null;
         String sql = "select * from contacts where id = ?;";
         try(Connection connection = Configuration.connectionToDataBace();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql)){
-            preparedStatement.setLong(1,id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()){
-                contact= new Contact();
-                contact.setId(resultSet.getLong("id"));
-                contact.setContactName(resultSet.getString("contact_name "));
-                contact.setPhoneNumber(resultSet.getString("contact_number"));
+            PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setLong(1,id);
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                contact = new Contact ();
+                contact.setId(result.getLong("id"));
+                contact.setContactName(result.getString("contact_name"));
+                contact.setPhoneNumber(result.getString("contact_number"));
+                contact.setPhone_id(result.getLong("phone_id"));
+                System.out.println("Successfully saved...");
 
             }
         }catch (SQLException a){
@@ -69,11 +73,11 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public List<Contact> getAllContacts() {
         List <Contact> getAll = new ArrayList<>();
-        String sql = "select * from contacts;";
+        String sql = "select * from contacts  ;";
         try(Connection connection = Configuration.connectionToDataBace();
         Statement statement = connection.createStatement()){
             ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 getAll.add(new Contact(
                         resultSet.getLong("id"),
                         resultSet.getString("contact_name"),
@@ -87,6 +91,8 @@ public class ContactDaoImpl implements ContactDao {
         return getAll;
     }
 
+
+
     @Override
     public List<Contact> getAllPhoneContacts(Long contactId) {
         List<Contact> contacts = new ArrayList<>();
@@ -98,8 +104,8 @@ public class ContactDaoImpl implements ContactDao {
             while (result.next()){
                 contacts.add(new Contact(
                         result.getLong("id"),
-                        result.getString("name"),
-                        result.getString("phone_number"),
+                        result.getString("contact_name"),
+                        result.getString("contact_number"),
                         result.getLong("phone_id")
                 ));
             }
@@ -168,7 +174,7 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public void updateContactInfo(Long id, Contact contact) {
-        String sql = "update contacts set contact_name = ?,phone_number = ?,phone_id = ? where id = ?;";
+        String sql = "update contacts set contact_name = ?,contact_number = ?,phone_id = ? where id = ?;";
         try(Connection connection =Configuration.connectionToDataBace();
             PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, contact.getContactName());

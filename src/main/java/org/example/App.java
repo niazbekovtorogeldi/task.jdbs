@@ -31,7 +31,7 @@ public class App {
 //        phoneService.createPhoneTable();
 //        phoneService.savePhone(new Phone("samsung s 10","samsung",16000,1L));
 //        phoneService.savePhone(new Phone("apple pro max 14","apple",2000,2L));
-//        phoneService.updatePhone(2L,new Phone("asus s 3","asus",3000,2L));
+////        phoneService.updatePhone(2L,new Phone("asus s 3","asus",3000,2L));
 //        System.out.println(phoneService.getAllUserPhone(2L));
 //        System.out.println(phoneService.getAllUserSortedUserPhone(2L, "asc"));
 //        System.out.println(phoneService.getYoungerUserPhone());
@@ -39,17 +39,17 @@ public class App {
 //        phoneService.deletePhoneById(2L);
         ContactServiceImpl contactService = new ContactServiceImpl();
 //        contactService.createContactTable();
-//        contactService.saveContact(new Contact("torogeldi","0505104433",1L));
-//        contactService.saveContact(new Contact("dastan","0707104433",2L));
-//        contactService.saveContact(new Contact("ttt","0707104413",3L));
+//        contactService.saveContact(new Contact("torogeldi","0505104433",2L));
+//        contactService.saveContact(new Contact("dastan","0707104433",1L));
 //        System.out.println(contactService.getContactById(2L));
 //        System.out.println(contactService.getAllContacts());
-//        System.out.println(contactService.getAllUserContacts(3L));
-//        System.out.println(contactService.getAllUserContacts(1L));
+//        System.out.println(contactService.getAllPhoneContacts(1L));
+//        System.out.println(contactService.getAllUserContacts(2L));
 //        contactService.getPhoneContactsCount(2L);
-//        contactService.getPhoneContactsCount(1L);
-//        contactService.updateContactInfo(1L,new Contact("dastan","055555555",1L));
+//        contactService.getUserContactsCount(2L);
+//        contactService.updateContactInfo(1L,new Contact(5L,"guljan","9999999",1L));
 //        contactService.deleteAllPhoneContactsByPhoneId(1L);
+
 
     }
 }
